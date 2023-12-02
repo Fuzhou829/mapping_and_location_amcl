@@ -1,0 +1,6 @@
+#ifndef __MAL_VERSION_H__
+#define __MAL_VERSION_H__
+#include <string>
+std::string version = "  ";
+std::string compile_time = " Sat Dec  2 11:37:18 CST 2023 ";
+#endif
