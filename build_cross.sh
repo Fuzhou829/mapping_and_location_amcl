@@ -44,10 +44,10 @@ echo "########################################################"
 cmake -B${build_dir} \
       -DROBOTIC_PROJECT_DIR="${robotic_project_dir}" \
       -DPLATFORM="${platform}" \
-      -DCMAKE_TOOLCHAIN_FILE=/home/fuzhou/svn/x86_toolchain/toolchain_x86.cmake
+      -DCMAKE_TOOLCHAIN_FILE=/root/private/svn/x86-toolchain/toolchain_x86.cmake
 
 cd ${build_dir}
-make -j4
+make -j8
 
 if [ "$run_install" = "yes" ]; then
   mkdir -p ${output_dir}

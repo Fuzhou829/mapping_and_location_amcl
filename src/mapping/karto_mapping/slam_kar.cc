@@ -19,7 +19,7 @@ namespace data_process {
 namespace mapping_and_location {
 
 SlamKarto::SlamKarto(const MappingConfig& config)
-  : laser_count_(0), marker_count_(0) {
+    : laser_count_(0), marker_count_(0) {
   SetConfiguration(config);
   map_successed = false;
   mapper_ = new karto::Mapper();
@@ -208,7 +208,7 @@ void SlamKarto::begin_slam(std::vector<char>* output, std::string map_name) {
   laser->SetOffsetPose(
       karto::Pose2(laser_x_offset, laser_y_offset, laser_th_offset));
   // SLAM_INFO("###slam karto modual laser_x=%f,laser_y=%f,laser_th=%f\n",
-        //  laser_x_offset, laser_y_offset, laser_th_offset);
+  //  laser_x_offset, laser_y_offset, laser_th_offset);
   laser->SetMinimumRange(laser_min_range);
   laser->SetMaximumRange(laser_max_range);
   laser->SetMinimumAngle(karto::math::DegreesToRadians(laser_min_angle));
@@ -303,6 +303,7 @@ bool SlamKarto::updateMap(std::vector<char>* output,
   Json::Value map_json;
   Json::Value map_header;
   Json::Value point_append;
+  Json::Value point_unknown;
   Json::Value atring_add;
   map_header["mapType"] = "2DGrid-Map";
   map_header["mapName"] = map_name;
@@ -324,6 +325,9 @@ bool SlamKarto::updateMap(std::vector<char>* output,
       switch (value) {
         case karto::GridStates_Unknown:
           grid_map->datas.push_back(255);
+          point_xy["x"] = info.mdOriginXInWorld + x * resolution_;
+          point_xy["y"] = info.mdOriginYInWorld + y * resolution_;
+          point_unknown.append(point_xy);
           break;
         case karto::GridStates_Occupied:
           grid_map->datas.push_back(100);
@@ -342,6 +346,7 @@ bool SlamKarto::updateMap(std::vector<char>* output,
     }
   }
   map_json["normalPosList"] = point_append;
+  map_json["unknownPosList"] = point_unknown;
   grid_map->to_json_char_array(output);
   std::string full_map_data_path =
       m_MappingConfig.map_data_file_path + "/" + map_name;
@@ -409,7 +414,6 @@ bool SlamKarto::addScan(karto::LaserRangeFinder* laser,
     intensities.push_back(0.0);
   }
 
-
   // create localized range scan
   karto::LocalizedRangeScan* range_scan =
       new karto::LocalizedRangeScan(laser->GetName(), readings, intensities);
@@ -418,7 +422,7 @@ bool SlamKarto::addScan(karto::LaserRangeFinder* laser,
   range_scan->SetCorrectedPose(karto_pose);
 
   // SLAM_DEBUG("get odom pos %f %f %f\n", karto_pose.GetX(),
-            // karto_pose.GetY(), karto_pose.GetHeading());
+  // karto_pose.GetY(), karto_pose.GetHeading());
   // Add the localized range scan to the mapper
   bool processed;
   if ((processed = mapper_->Process(range_scan))) {
@@ -426,7 +430,7 @@ bool SlamKarto::addScan(karto::LaserRangeFinder* laser,
     // Pose: " << range_scan->GetCorrectedPose() << std::endl;
     karto::Pose2 corrected_pose = range_scan->GetCorrectedPose();
     // SLAM_DEBUG("karto scan match = %f %f %f\n", corrected_pose.GetX(),
-              //  corrected_pose.GetY(), corrected_pose.GetHeading());
+    //  corrected_pose.GetY(), corrected_pose.GetHeading());
     // Add the localized range scan to the dataset (for memory management)
     dataset_->Add(range_scan);
   } else

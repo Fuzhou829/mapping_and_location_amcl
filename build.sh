@@ -39,11 +39,10 @@ echo ${robotic_project_dir}
 echo ${output_dir}
 echo "########################################################"
 
-#rm -rf ${build_dir}
+# rm -rf ${build_dir}
 
 cmake -B${build_dir} \
       -DROBOTIC_PROJECT_DIR="${robotic_project_dir}" \
-      -DCMAKE_TOOLCHAIN_FILE=/home/shinva/toolchain_x86.cmake \
       -DPLATFORM="${platform}"
 
 cd ${build_dir}

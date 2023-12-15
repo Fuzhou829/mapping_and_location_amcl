@@ -646,11 +646,11 @@ bool GridLocation::_particleFilterRun(char fup) {
         string name = std::string("./") + std::to_string(show_cnt_) + ".png";
         cv::imwrite(name, cv_map_image_);
       }
-      SLAM_DEBUG("条件变量唤醒\n");
-      pthread_mutex_lock(&particle_mutex_);
+      SLAM_DEBUG("粒子重采样\n");
+      // pthread_mutex_lock(&particle_mutex_);
       resampled = true;
-      pthread_cond_signal(&cond);
-      pthread_mutex_unlock(&particle_mutex_);
+      // pthread_cond_signal(&cond);
+      // pthread_mutex_unlock(&particle_mutex_);
       m_ResampleCount = 0;
     }
     // amcl::pf_sample_set_t *cur_set = amcl::pf_get_current_set(m_pPf);
@@ -842,6 +842,7 @@ amcl::map_t *GridLocation::_doMapOpen() {
   }
   int total_height = height - 1;
   int landmark_cnt = 0;
+  SLAM_DEBUG("height%d,   width%d\n", height, width);
   for (index_y = 0; index_y < height; index_y++) {
     for (index_x = 0; index_x < width; index_x++) {
       xi = index_x;
@@ -858,12 +859,22 @@ amcl::map_t *GridLocation::_doMapOpen() {
         landmarks_.push_back(landmark_pos);
         int grid_x = MAP_GXWX(map, landmark_pos.v[0]);
         int grid_y = MAP_GYWY(map, landmark_pos.v[1]);
-        int cell_radius = floor(m_LocationConfig.land_mark_config.landmark_radius / map->scale + 0.5);
+        SLAM_DEBUG("grid_x%d,   grid_y%d\n", grid_x, grid_y);
+        int cell_radius = floor(
+            m_LocationConfig.land_mark_config.landmark_radius / map->scale +
+            0.5);
+        SLAM_DEBUG("反光柱直径cell_radius%d    %f\n", cell_radius,
+                   m_LocationConfig.land_mark_config.landmark_radius);
         for (int xx = -cell_radius; xx <= cell_radius; xx++) {
           for (int yy = -cell_radius; yy <= cell_radius; yy++) {
-            if (abs(xx) + abs(yy) > 3) continue;
-            if (xx + grid_x < 0 || xx + grid_x > width || yy + grid_y < 0 || yy + grid_y > height) continue;
-            map->landmraks.emplace_back(xx + grid_x, yy + grid_y);
+            if (sqrt(xx * xx + yy * yy) > cell_radius) continue;
+            if (xx + grid_x < 0 || xx + grid_x >= width || yy + grid_y < 0 ||
+                yy + grid_y >= height)
+              continue;
+            int new_x = xx + grid_x;
+            int new_y = yy + grid_y;
+            SLAM_DEBUG("new_x:%d    new_y:%d\n", new_x, new_y);
+            map->cells[(new_y)*width + (new_x)].occ_state = +2;
           }
         }
         map->cells[(index_y)*width + (index_x)].occ_state = +2;
@@ -1123,14 +1134,14 @@ gomros::message::Position GridLocation::GetCurrentPose() {
 }
 
 cv::Mat GridLocation::GetImage() {
-  SLAM_ERROR("等待线程锁释放\n");
-  pthread_mutex_lock(&particle_mutex_);
-  while (!ready) {
-    pthread_cond_wait(&cond, &particle_mutex_);
-  }
-  ready = false;  // 重置条件
-  pthread_mutex_unlock(&particle_mutex_);
-  SLAM_ERROR("线程锁释放\n");
+  // SLAM_ERROR("等待线程锁释放\n");
+  // pthread_mutex_lock(&particle_mutex_);
+  // while (!ready) {
+  //   pthread_cond_wait(&cond, &particle_mutex_);
+  // }
+  // ready = false;  // 重置条件
+  // pthread_mutex_unlock(&particle_mutex_);
+  // SLAM_ERROR("线程锁释放\n");
   return cv_map_image_;
 }
 

@@ -2,5 +2,5 @@
 #define __MAL_VERSION_H__
 #include <string>
 std::string version = "  ";
-std::string compile_time = " Sat Dec  2 11:37:18 CST 2023 ";
+std::string compile_time = " Fri Dec 15 16:37:52 CST 2023 ";
 #endif

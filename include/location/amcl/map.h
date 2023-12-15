@@ -74,7 +74,9 @@ typedef struct {
 
   // The map data, stored as a grid
   map_cell_t *cells;
-  std::vector<std::pair<int, int> > landmraks;
+
+  // std::vector<std::pair<int, int> > landmarks;
+  // int** landmarks;
 
   // Max distance at which we care about obstacles, for constructing
   // likelihood field

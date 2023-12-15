@@ -61,7 +61,8 @@ map_t *map_alloc(void) {
 
   // Allocate storage for main map
   map->cells = (map_cell_t *)NULL;
-
+  // map->landmarks = std::vector<std::pair<int, int>>();
+  // map->landmarks = (int**)malloc(2 * sizeof(int*));
   return map;
 }
 

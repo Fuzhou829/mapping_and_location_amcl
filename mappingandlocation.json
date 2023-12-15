@@ -13,44 +13,36 @@
   "map_data_file_path": "./map",
   "map_config_file_path": "./config",
   "init_pose_file_path": "./map",
-
   "log_file_name": "mapping_location_log",
   "log_level": 0,
   "is_printf_to_terminal": true,
-
-  "mapping_type": 3,
-  "location_type": 5,
+  "mapping_type": 1,
+  "location_type": 3,
   "mapping_pattern": 1,
   "odom_type": 0,
-
   "mapping_resolution": 0.02,
-  "flush_odom_list_size" : 200,
-  "distance_step" : 0.1,
-  "angular_step" : 0.1,
-
+  "flush_odom_list_size": 200,
+  "distance_step": 0.1,
+  "angular_step": 0.1,
   "mapping_start_angle": -120.0,
   "mapping_end_angle": 120.0,
-  "mapping_laser_resolution": 0.5,
+  "mapping_laser_resolution": 0.05,
   "mapping_laser_min_range": 0.5,
-  "mapping_laser_max_range": 30.0,
-
+  "mapping_laser_max_range": 25.0,
   "location_start_angle": -120.0,
   "location_end_angle": 120.0,
-  "location_laser_resolution": 0.5,
+  "location_laser_resolution": 0.05,
   "location_laser_min_range": 0.5,
-  "location_laser_max_range": 30.0,
-
-  "recognition_type" : 0,
-
-  "landmark_intensities": 700,
+  "location_laser_max_range": 25.0,
+  "recognition_type": 0,
+  "landmark_intensities": 350,
   "landmark_size_threshold": 1,
   "landmark_radius": 0.0375,
   "min_reflector_count_in_map": 25,
   "max_ladar_size_in_sub_map": 800000,
   "distance_for_constraint": 10.0,
   "distance_for_loop": 6.0,
-  "distance_for_same_reflector" : 0.05,
-
+  "distance_for_same_reflector": 0.05,
   "data_association_max_dis": 20.0,
   "observation_error": 0.03,
   "map_ma_match_dis_threshold": 10.0,
@@ -58,14 +50,12 @@
   "distance_diff_threshold": 0.1,
   "reflector_max_distance": 12.8,
   "error_threshold_for_loop": 0.1,
-
   "radar_position_x": 0.327,
   "radar_position_y": 0.01,
-  "radar_position_theta": 0.0118,
-  "camera_position_x" : 0.0,
-  "camera_position_y" : 0.0,
-  "camera_position_theta" : 0.0,
-
+  "radar_position_theta": 0.0418,
+  "camera_position_x": 0.0,
+  "camera_position_y": 0.0,
+  "camera_position_theta": 0.0,
   "use_scan_matching": false,
   "scan_matching_min_distance": 0.0,
   "scan_matching_max_distance": 29.0,
@@ -74,7 +64,6 @@
   "rotation_delta_cost_factor": 10.0,
   "num_threads": 2,
   "max_num_iterations": 10,
-
   "control_left_error": 0.02,
   "control_right_error": 0.02,
   "wheel_distance": 0.628,
@@ -82,15 +71,14 @@
   "observation_noise_theta": 0.02,
   "imu_theta_noise": 0.02,
   "ma_distance_threshold": 15,
-
   "front_wheel_length": 0.88581,
   "back_wheel_length": 0.88581,
   "front_wheel_alpha": 0.3335,
   "back_wheel_alpha": 0.3335,
-
-  "to_centre_distance" : 1.01,
-
-  "use_weighted_areas" : false,
-  ¡°use_landmark":false,
-  "is_need_record_data" : false
+  "to_centre_distance": 1.01,
+  "use_weighted_areas": false,
+  "use_landmark": false,
+  "grid_weight": 1,
+  "landmark_weight": 0,
+  "is_need_record_data": false
 }

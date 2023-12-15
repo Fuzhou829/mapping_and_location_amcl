@@ -239,32 +239,32 @@ void map_update_cspace(map_t* map, double max_occ_dist, double max_occ_dist_land
   // 创建反光柱似然与地图 
   memset(marked2, 0, sizeof(unsigned char) * map->size_x * map->size_y);
   SLAM_WARN("开始计算反光柱占用栅格\n");
-  // for (int i = 0; i < map->size_x; i++) {
-  //   cell.src_i_ = cell.i_ = i;
-  //   for (int j = 0; j < map->size_y; j++) {
-  //     if (map->cells[MAP_INDEX(map, i, j)].occ_state == +2) {
-  //       map->cells[MAP_INDEX(map, i, j)].occ_dist_to_land_mark = 0.0;
-  //       cell.src_j_ = cell.j_ = j;
-  //       marked[MAP_INDEX(map, i, j)] = 1;
-  //       Q2.push(cell);
-  //     } else
-  //       map->cells[MAP_INDEX(map, i, j)].occ_dist_to_land_mark = max_occ_dist_land;
-  //   }
-  // }
   for (int i = 0; i < map->size_x; i++) {
     cell.src_i_ = cell.i_ = i;
     for (int j = 0; j < map->size_y; j++) {
-        cell.src_j_ = cell.j_ = j;     
+      if (map->cells[MAP_INDEX(map, i, j)].occ_state == +2) {
+        map->cells[MAP_INDEX(map, i, j)].occ_dist_to_land_mark = 0.0;
+        cell.src_j_ = cell.j_ = j;
+        marked[MAP_INDEX(map, i, j)] = 1;
+        Q2.push(cell);
+      } else
         map->cells[MAP_INDEX(map, i, j)].occ_dist_to_land_mark = max_occ_dist_land;
     }
   }
-  for (auto landmark_grid : map->landmraks) {
-    int i = landmark_grid.first;
-    int j = landmark_grid.second;
-    map->cells[MAP_INDEX(map, i, j)].occ_dist_to_land_mark = 0.0;
-    marked[MAP_INDEX(map, i, j)] = 1;
-    Q2.push(cell);
-  }
+  // for (int i = 0; i < map->size_x; i++) {
+  //   cell.src_i_ = cell.i_ = i;
+  //   for (int j = 0; j < map->size_y; j++) {
+  //       cell.src_j_ = cell.j_ = j;     
+  //       map->cells[MAP_INDEX(map, i, j)].occ_dist_to_land_mark = max_occ_dist_land;
+  //   }
+  // }
+  // for (auto landmark_grid : map->landmarks) {
+  //   int i = landmark_grid.first;
+  //   int j = landmark_grid.second;
+  //   map->cells[MAP_INDEX(map, i, j)].occ_dist_to_land_mark = 0.0;
+  //   marked[MAP_INDEX(map, i, j)] = 1;
+  //   Q2.push(cell);
+  // }
   
   SLAM_WARN("反光柱栅格数量%d\n", Q2.size());
   SLAM_WARN("开始计算occ_dist_to_landmark\n");

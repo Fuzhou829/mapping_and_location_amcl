@@ -119,7 +119,7 @@ set(CMAKE_CXX_FLAGS "-std=c++11 -g -O0 -fprofile-arcs -ftest-coverage")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # # 增加单元测试
 if (NOT CMAKE_CROSSCOMPILING)
-#add_subdirectory(test)
+add_subdirectory(test)
 endif()
 
 file(GLOB_RECURSE LINT_PLUGIN_SRC
